@@ -5,13 +5,17 @@
   "description": "المتجر الرقمي لمؤسسة الإمدادات الذكية الحديثة — واجهة المتجر ولوحة التحكم مع Firebase",
   "type": "module",
   "scripts": {
-    "build": "npm run build:css && npm run build:js",
+    "build": "npm run config && npm run build:css && npm run build:js && npm run build:functions",
     "build:css": "tailwindcss -c tailwind.config.cjs -i src/styles.css -o dist/app.css --minify",
-    "build:js": "esbuild src/app/main.js src/admin/main.js --bundle --format=esm --minify --target=es2020 --outdir=dist --entry-names=[dir] --splitting --chunk-names=chunks/[name]-[hash]",
+    "build:js": "node -e \"require('fs').rmSync('dist/chunks',{recursive:true,force:true})\" && esbuild src/app/main.js src/admin/main.js --bundle --format=esm --minify --target=es2020 --outdir=dist --entry-names=[dir] --splitting --chunk-names=chunks/[name]-[hash]",
     "dev": "npm run build && npx --yes http-server -c-1 -p 5173 .",
     "emulators": "npx --yes firebase-tools@15 emulators:start --only firestore,auth,storage --project demo-emdad",
     "test": "npx --yes firebase-tools@15 emulators:exec --only firestore,auth --project demo-emdad \"node --test --test-force-exit tests/*.test.mjs\"",
-    "deploy": "npm run build && npx --yes firebase-tools@15 deploy"
+    "deploy": "npm run build && npx --yes firebase-tools@15 deploy --only hosting,firestore,storage",
+    "build:functions": "node -e \"require('fs').copyFileSync('src/lib/pricing.js','functions/pricing.js')\"",
+    "config": "node scripts/gen-config.mjs",
+    "deploy:rules": "npx --yes firebase-tools@15 deploy --only firestore,storage",
+    "deploy:functions": "npm run build:functions && npx --yes firebase-tools@15 deploy --only functions"
   },
   "dependencies": {
     "firebase": "^13.4.0"

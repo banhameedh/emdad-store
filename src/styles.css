@@ -8,10 +8,15 @@
 @font-face { font-family: 'Shamel'; font-weight: 500; font-display: swap; src: url(../assets/fonts/shamel-500.woff2) format('woff2'); }
 @font-face { font-family: 'Shamel'; font-weight: 700; font-display: swap; src: url(../assets/fonts/shamel-700.woff2) format('woff2'); }
 
+/* رمز الريال السعودي (U+20C1) — Saudi Riyal Font, emran-alhaddad, رخصة SIL OFL 1.1 (assets/fonts/SAUDI-RIYAL-FONT-LICENSE.txt)
+ * unicode-range يقصر الخط على الرمز فقط فلا يغيّر خط Shamel لبقية النصوص */
+@font-face { font-family: 'SaudiRiyal'; font-weight: 100 500; font-display: block; src: url(../assets/fonts/saudi-riyal-400.woff2) format('woff2'); unicode-range: U+20C1, U+E900; }
+@font-face { font-family: 'SaudiRiyal'; font-weight: 600 900; font-display: block; src: url(../assets/fonts/saudi-riyal-700.woff2) format('woff2'); unicode-range: U+20C1, U+E900; }
+
 @layer base {
   :root { --line: rgba(7,90,159,.09); }
   html, body { height: 100%; }
-  body { font-family: 'Shamel', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'SaudiRiyal', 'Shamel', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
 }
 
 @layer components {
@@ -100,3 +105,43 @@
 @media (prefers-reduced-motion: reduce) {
   .view, .sheet, .toast, .press, .fade-in { transition: none !important; animation: none !important; }
 }
+
+/* ---------------- المتجر: شبكة المنتجات والبطاقات والخيارات (بنفس رموز الهوية) ---------------- */
+@layer components {
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(152px, 1fr)); gap: 10px; }
+  .pcard { transition: transform .2s ease, box-shadow .2s ease; }
+  .pcard .pimg { transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+  @media (hover: hover) { .pcard:hover { transform: translateY(-2px); box-shadow: 0 18px 34px -16px rgba(7,90,159,.45); } .pcard:hover .pimg { transform: scale(1.04); } }
+  .opt span { display: inline-flex; align-items: center; gap: 4px; height: 36px; padding: 0 12px; border-radius: 12px; background: #fff; border: 1px solid rgba(7,90,159,.14); font-size: 12.5px; cursor: pointer; transition: all .15s; }
+  .opt span small { font-size: 10.5px; color: #6B8299; }
+  .opt input:checked + span { background: #075A9F; border-color: #075A9F; color: #fff; font-weight: 700; }
+  .opt input:checked + span small { color: rgba(255,255,255,.8); }
+  .opt input:focus-visible + span { box-shadow: 0 0 0 3px rgba(33,150,210,.35); }
+  .reveal { opacity: 0; transform: translateY(10px); transition: opacity .45s ease, transform .45s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  details.faq[open] .faq-chev { transform: rotate(180deg); }
+  .faq-chev { transition: transform .2s; }
+  .pop { animation: pop .45s cubic-bezier(.2,.8,.2,1.4) both; } @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  .side-note nav button { transition: background .15s; }
+}
+/* الأجهزة اللوحية والحواسيب: عمود تطبيق أعرض مع الحفاظ على نفس الطابع البصري */
+@media (min-width: 700px) and (max-width: 1000px) { .device { width: min(680px, 100%); } }
+@media (min-width: 1001px) { .device { width: clamp(430px, 40vw, 600px); } }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+/* ---------------- سلايدر الرئيسية ---------------- */
+@layer components {
+  .hero-track, .hero-slide { position: absolute; inset: 0; }
+  .hero-slide { opacity: 0; transition: opacity .9s ease; }
+  .hero-slide.on { opacity: 1; }
+  .hero-slide img { transform: scale(1.06); transition: transform 6s ease-out; }
+  .hero-slide.on img { transform: scale(1); }
+  .hero-texts { position: absolute; right: 24px; left: 20px; bottom: 58px; display: grid; }
+  .hero-text { grid-area: 1 / 1; opacity: 0; transform: translateY(8px); transition: opacity .5s ease .15s, transform .5s ease .15s; pointer-events: none; }
+  .hero-text.on { opacity: 1; transform: none; pointer-events: auto; }
+  .hero-dot { width: 7px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.5); transition: all .3s; }
+  .hero-dot.on { width: 20px; background: #F7941E; }
+  .hero-card { height: 300px; }
+}
+@media (min-width: 700px) { .hero-card { height: 340px; } }
+@media (prefers-reduced-motion: reduce) { .hero-slide, .hero-slide img, .hero-text { transition: none !important; transform: none !important; } }

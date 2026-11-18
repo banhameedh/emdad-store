@@ -1,3 +1,7 @@
 node_modules/
 .firebase/
 *-debug.log
+
+.env
+functions/node_modules/
+functions/pricing.js

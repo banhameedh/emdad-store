@@ -1,14 +1,25 @@
 rules_version = '2';
 
-// صور المنتجات والأقسام: قراءة عامة، والرفع للمشرفين فقط (صور حتى 5MB)
+// Firebase Storage لمتجر الإمدادات
+// - catalog/: صور المنتجات والأقسام والأعمال — قراءة عامة، الرفع للمشرفين فقط (صور حتى 5MB).
+// - uploads/{uid}/: ملفات التصميم والمرفقات من العملاء — يرفعها صاحبها فقط (حساب مسجل أو جلسة مجهولة)،
+//   ولا يقرؤها إلا المشرفون. لا قراءة عامة لملفات العملاء.
 service firebase.storage {
   match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null && firestore.exists(/databases/(default)/documents/admin_users/$(request.auth.uid));
+    }
     match /catalog/{path=**} {
       allow read: if true;
-      allow write: if request.auth != null
-        && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
+      allow write: if isAdmin()
         && (request.resource == null
             || (request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*')));
+    }
+    match /uploads/{uid}/{file} {
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.size < 20 * 1024 * 1024
+        && !request.resource.contentType.matches('text/html|application/(x-)?javascript|application/x-msdownload|application/x-sh');
+      allow read, delete: if isAdmin();
     }
   }
 }

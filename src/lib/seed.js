@@ -166,239 +166,6 @@ export const SEED_CATEGORIES = [
   }
 ];
 
-export const SEED_PRODUCTS = [
-  {
-    "id": "signage-1",
-    "categoryId": "signage",
-    "name": "الحروف البارزة المضيئة",
-    "desc": "ستيل / أكريلك · إضاءة LED",
-    "image": "assets/images/letters-channel-letter-a-gold-halo.jpg",
-    "price": null,
-    "order": 1,
-    "active": true
-  },
-  {
-    "id": "signage-2",
-    "categoryId": "signage",
-    "name": "لوحات الواجهات",
-    "desc": "زنكور بإضاءة أمامية وخلفية",
-    "image": "assets/images/letters-3d-illuminated-store-signage.jpg",
-    "price": null,
-    "order": 2,
-    "active": true
-  },
-  {
-    "id": "signage-3",
-    "categoryId": "signage",
-    "name": "واجهات الكلادينج",
-    "desc": "تصميم وتنفيذ وتركيب",
-    "image": "assets/images/facade-hypermarket-green-night.jpg",
-    "price": null,
-    "order": 3,
-    "active": true
-  },
-  {
-    "id": "signage-4",
-    "categoryId": "signage",
-    "name": "البايلون والتوتم",
-    "desc": "لوحات طرق ومداخل",
-    "image": "assets/images/pylon-almahwa-desert-highway-monument.jpg",
-    "price": null,
-    "order": 4,
-    "active": true
-  },
-  {
-    "id": "signage-5",
-    "categoryId": "signage",
-    "name": "اللوحات الإرشادية",
-    "desc": "للمستشفيات والمنشآت",
-    "image": "assets/images/wayfinding-oqla-hospital-monument-sign.jpg",
-    "price": null,
-    "order": 5,
-    "active": true
-  },
-  {
-    "id": "printing-1",
-    "categoryId": "printing",
-    "name": "البنرات والفليكس",
-    "desc": "داخلي وخارجي · مقاسات حسب الطلب",
-    "image": "assets/images/p23-05.jpg",
-    "price": null,
-    "order": 1,
-    "active": true
-  },
-  {
-    "id": "printing-2",
-    "categoryId": "printing",
-    "name": "الاستيكرات",
-    "desc": "فينيل لامع / مطفي · قص كنتور",
-    "image": "assets/images/retail-petrogen-fuel-dispenser-sticker.jpg",
-    "price": null,
-    "order": 2,
-    "active": true
-  },
-  {
-    "id": "printing-3",
-    "categoryId": "printing",
-    "name": "طباعة الرول أب",
-    "desc": "85×200 سم · مع الحامل",
-    "image": "assets/images/profile-p38-01.jpg",
-    "price": null,
-    "order": 3,
-    "active": true
-  },
-  {
-    "id": "printing-4",
-    "categoryId": "printing",
-    "name": "ملصقات المنتجات",
-    "desc": "ورق / بلاستيك · مقاوم للماء",
-    "image": "assets/images/branding-acrylic-business-card-display.jpg",
-    "price": null,
-    "order": 4,
-    "active": true
-  },
-  {
-    "id": "gifts-1",
-    "categoryId": "gifts",
-    "name": "دروع التكريم",
-    "desc": "كريستال · ذهبي · خشب",
-    "image": "assets/images/awards-luxury-gold-crystal-reem-trophy.jpg",
-    "price": null,
-    "order": 1,
-    "active": true
-  },
-  {
-    "id": "gifts-2",
-    "categoryId": "gifts",
-    "name": "الأختام الفاخرة",
-    "desc": "مقابض كريستال",
-    "image": "assets/images/branding-luxury-crystal-office-stamps.jpg",
-    "price": null,
-    "order": 2,
-    "active": true
-  },
-  {
-    "id": "gifts-3",
-    "categoryId": "gifts",
-    "name": "علب الهدايا المطبوعة",
-    "desc": "تغليف بهوية الجهة",
-    "image": "assets/images/branding-packaging-gift-box-design.jpg",
-    "price": null,
-    "order": 3,
-    "active": true
-  },
-  {
-    "id": "gifts-4",
-    "categoryId": "gifts",
-    "name": "الهدايا التذكارية",
-    "desc": "أكواب · أقلام · شنط",
-    "image": "assets/images/p21-02.jpg",
-    "price": null,
-    "order": 4,
-    "active": true
-  },
-  {
-    "id": "craft-1",
-    "categoryId": "craft",
-    "name": "اللوحات الفنية المؤطرة",
-    "desc": "طباعة فنية بإطار خشبي",
-    "image": "assets/images/03_Framed_Arabian_Horse.jpg",
-    "price": null,
-    "order": 1,
-    "active": true
-  },
-  {
-    "id": "craft-2",
-    "categoryId": "craft",
-    "name": "المجسمات والستاندات",
-    "desc": "فوركس · خشب · فلين",
-    "image": "assets/images/p13-03.jpg",
-    "price": null,
-    "order": 2,
-    "active": true
-  },
-  {
-    "id": "craft-3",
-    "categoryId": "craft",
-    "name": "المنصات والبوديوم",
-    "desc": "تصميم حسب المناسبة",
-    "image": "assets/images/booth-customer-service-curved-counter.jpg",
-    "price": null,
-    "order": 3,
-    "active": true
-  },
-  {
-    "id": "events-1",
-    "categoryId": "events",
-    "name": "بوابات الفعاليات",
-    "desc": "مداخل مطبوعة بهوية المناسبة",
-    "image": "assets/images/booth-national-day-entrance-portal.jpg",
-    "price": null,
-    "order": 1,
-    "active": true
-  },
-  {
-    "id": "events-2",
-    "categoryId": "events",
-    "name": "البوثات الترويجية",
-    "desc": "ستاند متنقل مع طاولة",
-    "image": "assets/images/booth-national-day-promotional-stand.jpg",
-    "price": null,
-    "order": 2,
-    "active": true
-  },
-  {
-    "id": "events-3",
-    "categoryId": "events",
-    "name": "أركان المعارض",
-    "desc": "تصميم ثلاثي الأبعاد وتنفيذ",
-    "image": "assets/images/profile-p32-01.jpg",
-    "price": null,
-    "order": 3,
-    "active": true
-  },
-  {
-    "id": "events-4",
-    "categoryId": "events",
-    "name": "بوابات التدشين",
-    "desc": "للمشاريع والافتتاحات",
-    "image": "assets/images/booth-exhibition-corridor-setup.jpg",
-    "price": null,
-    "order": 4,
-    "active": true
-  },
-  {
-    "id": "design-1",
-    "categoryId": "design",
-    "name": "الهوية البصرية",
-    "desc": "شعار + دليل استخدام + تطبيقات",
-    "image": "assets/images/p21-02.jpg",
-    "price": null,
-    "order": 1,
-    "active": true
-  },
-  {
-    "id": "design-2",
-    "categoryId": "design",
-    "name": "التصميم ثلاثي الأبعاد",
-    "desc": "بوثات وواجهات ومجسمات",
-    "image": "assets/images/p27-03.jpg",
-    "price": null,
-    "order": 2,
-    "active": true
-  },
-  {
-    "id": "design-3",
-    "categoryId": "design",
-    "name": "منشورات السوشال ميديا",
-    "desc": "باقات شهرية",
-    "image": "assets/images/profile-p38-01.jpg",
-    "price": null,
-    "order": 3,
-    "active": true
-  }
-];
-
 export const SEED_PORTFOLIO = [
   {
     "id": "pf-01",
@@ -523,6 +290,12 @@ export const SEED_PORTFOLIO = [
 ];
 
 export const SEED_SETTINGS = {
+  storeName: 'الإمدادات الذكية الحديثة',
+  legalName: 'مؤسسة الإمدادات الذكية الحديثة للدعاية والإعلان',
+  // بيانات تُدخلها الإدارة (تظهر للزائر كحقل بانتظار الاعتماد حتى تُعبّأ)
+  email: '',
+  crNumber: '',
+  vatNumber: '',
   phone: '0573838818',
   whatsapp: '966573838818',
   mapsUrl: 'https://maps.app.goo.gl/MUCBUbeKTxsrvJK98',
@@ -533,40 +306,51 @@ export const SEED_SETTINGS = {
   tiktok: 'https://www.tiktok.com/@emdad_ads',
   instagram: '',
   youtube: '',
-  googleRating: 4.8,
-  googleRatingCount: 3260,
+  // التقييم في النموذج الأولي كان افتراضيًا؛ يُدخل التقييم الفعلي من لوحة التحكم
+  googleRating: null,
+  googleRatingCount: null,
   googleUrl: '',
-  showLoyalty: true,
+  // برنامج الولاء تجريبي (نقاط محلية دون نظام فعلي) — مخفي حتى تُعتمد قواعده ويُربط بنظام نقاط
+  showLoyalty: false,
+  // شعارات بوابات الدفع (مدى، Apple Pay…) تُخفى حتى يُفعَّل الدفع الإلكتروني فعليًا
+  showPaymentLogos: false,
+  // التسعير
+  vatRate: 15,
+  pricesIncludeVat: true,
+  pricesApprovedNote: 'الأسعار المعلَّمة «سعر مبدئي» تقديرية وتُؤكد قبل التنفيذ.',
+  // طرق الدفع الفعلية (لا تتطلب بوابة دفع)
+  payments: { cod: true, store: true, bank: false },
+  bankName: '', iban: '', accountName: '',
+  // الاستلام والتوصيل
+  pickupEnabled: true,
+  deliveryEnabled: true,
+  deliveryFee: null, // null = تُحدد حسب المدينة وتُؤكد قبل التنفيذ
+  // سلايدر الرئيسية (قابل للتعديل من لوحة التحكم ← الإعدادات). link = مسار داخل المتجر مثل category/printing
+  heroSlides: [
+    { title: 'حلول الطباعة والتصميم باحترافية', desc: 'نصمم ونطبع هويتك ونحول أفكارك إلى واقع.', cta: 'اكتشف خدمات الطباعة', link: 'category/printing', image: 'assets/images/profile-p38-01.jpg' },
+    { title: 'اجعل علامتك التجارية أكثر حضورًا', desc: 'لوحات إعلانية وواجهات احترافية بجودة عالية.', cta: 'استكشف خدمات اللوحات', link: 'category/signage', image: 'assets/images/letters-oqla-hospital-3d-channel-night-front.jpg' },
+    { title: 'هدايا دعائية تترك أثرًا', desc: 'منتجات دعائية مخصصة تعزز حضور علامتك التجارية.', cta: 'تسوق الآن', link: 'shop/cat:gifts', image: 'assets/images/awards-luxury-gold-crystal-reem-trophy.jpg' },
+    { title: 'جميع احتياجات منشأتك في مكان واحد', desc: 'نوفر حلول التجهيز والتوريد والطباعة بمختلف أنواعها.', cta: 'اكتشف خدماتنا', link: 'services', image: 'assets/images/facade-emdad-building-and-fleet.jpg' },
+  ],
+  heroInterval: 4.5,
+  // الصيانة
+  maintenance: false,
+  maintenanceMessage: 'نعمل على تحديث المتجر لخدمتكم بشكل أفضل، وسنعود قريبًا.',
   // 0 = الأحد … 6 = السبت — ساعات 24 (open/close)، أو { closed: true }
-  hours: {
-    "0": {
-      "open": 8,
-      "close": 23
-    },
-    "1": {
-      "open": 8,
-      "close": 23
-    },
-    "2": {
-      "open": 8,
-      "close": 23
-    },
-    "3": {
-      "open": 8,
-      "close": 23
-    },
-    "4": {
-      "open": 8,
-      "close": 23
-    },
-    "5": {
-      "open": 16,
-      "close": 23
-    },
-    "6": {
-      "open": 8,
-      "close": 23
-    }
-  }
+  hours: { 0: { open: 8, close: 23 }, 1: { open: 8, close: 23 }, 2: { open: 8, close: 23 }, 3: { open: 8, close: 23 }, 4: { open: 8, close: 23 }, 5: { open: 16, close: 23 }, 6: { open: 8, close: 23 } },
+  hoursApproved: false,
 };
 
+/* استخدامات ومميزات كل قسم (صفحة «خدماتنا») */
+const CATEGORY_EXTRA = {
+  signage: { uses: ['واجهات المحلات والمراكز التجارية', 'المستشفيات والجهات الحكومية', 'المشاريع الإنشائية والطرق'], benefits: ['تصميم وتصنيع وتركيب من جهة واحدة', 'خامات وإضاءة مناسبة للأجواء الخارجية', 'لوحات إرشادية بدليل هوية موحد'] },
+  printing: { uses: ['الحملات الإعلانية والعروض', 'الفعاليات والمعارض', 'تغليف المنتجات وتمييزها'], benefits: ['طباعة عالية الدقة بألوان ثابتة', 'مقاسات حسب الطلب', 'تنفيذ سريع للكميات الصغيرة والكبيرة'] },
+  gifts: { uses: ['حفلات التكريم والتخرج', 'المؤتمرات والمعارض', 'هدايا العملاء والموظفين'], benefits: ['تخصيص كامل بالشعار والنص', 'خيارات خامات متعددة', 'تغليف بهوية الجهة'] },
+  craft: { uses: ['المجالس والمكاتب', 'الأنشطة المدرسية', 'نقاط البيع والحملات'], benefits: ['قص دقيق للخشب والفوركس والفلين', 'تصاميم مخصصة حسب المناسبة', 'تشطيبات فنية متقنة'] },
+  events: { uses: ['المناسبات الوطنية والمهرجانات', 'المعارض والمؤتمرات', 'التدشين والافتتاحات'], benefits: ['تصميم ثلاثي الأبعاد قبل التنفيذ', 'تركيب وفك في الموقع', 'تجهيز متكامل بهوية المناسبة'] },
+  design: { uses: ['المشاريع الناشئة', 'الشركات التي تحدّث هويتها', 'حسابات التواصل الاجتماعي'], benefits: ['هوية متكاملة بدليل استخدام', 'ملفات جاهزة للطباعة والنشر', 'جولات تعديل واضحة'] },
+};
+SEED_CATEGORIES.forEach((c) => Object.assign(c, CATEGORY_EXTRA[c.id] || {}));
+
+export { SEED_PRODUCTS } from './seed-products.js';
+export { SEED_PAGES, POLICY_PAGES } from './seed-pages.js';

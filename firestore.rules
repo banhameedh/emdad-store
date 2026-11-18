@@ -1,18 +1,22 @@
 rules_version = '2';
 
-// قواعد أمان Firestore لمتجر الإمدادات
-// - الزوار: قراءة الكتالوج المفعّل فقط + إنشاء طلب عرض سعر بصيغة محددة.
-// - المشرفون (مستند في admins/{uid}): إدارة كاملة للكتالوج والطلبات.
+// قواعد أمان Firestore لمتجر الإمدادات (مشروع edadatstor)
+// - الزوار: قراءة الكتالوج المنشور + إنشاء طلبات/عروض أسعار/رسائل بصيغة محددة فقط.
+// - العملاء: قراءة وتعديل ملفهم فقط، وقراءة طلباتهم فقط (uid).
+// - المشرفون (مستند في admin_users/{uid}): إدارة كاملة. لا تعتمد الصلاحيات على إخفاء عناصر الواجهة.
 service cloud.firestore {
   match /databases/{database}/documents {
 
     function signedIn() { return request.auth != null; }
+    function realUser() { return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous'; }
     function isAdmin() {
-      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return signedIn() && exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
     }
     function str(v, min, max) { return v is string && v.size() >= min && v.size() <= max; }
+    function optStr(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+    function optList(d, k, max) { return !(k in d) || (d[k] is list && d[k].size() <= max); }
 
-    // ---------- الكتالوج ----------
+    // ---------- الكتالوج (قراءة عامة للمنشور فقط، الكتابة للمشرف) ----------
     match /categories/{id} {
       allow read: if resource.data.active == true || isAdmin();
       allow write: if isAdmin();
@@ -25,43 +29,119 @@ service cloud.firestore {
       allow read: if resource.data.active == true || isAdmin();
       allow write: if isAdmin();
     }
+    match /promotions/{id} {
+      allow read: if resource.data.active == true || isAdmin();
+      allow write: if isAdmin();
+    }
     match /settings/{id} {
       allow read: if true;
       allow write: if isAdmin();
     }
-
-    // ---------- الطلبات (طلبات عروض الأسعار) ----------
-    function validItems(items) {
-      return items is list && items.size() <= 30;
+    match /pages/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
-    function validNewOrder(id, d) {
-      return d.keys().hasAll(['ref', 'name', 'phone', 'serviceId', 'serviceName', 'description', 'items', 'status', 'source', 'consent', 'createdAt'])
-        && d.keys().hasOnly(['ref', 'name', 'phone', 'email', 'serviceId', 'serviceName', 'description', 'items', 'status', 'source', 'consent', 'createdAt'])
-        && d.ref == 'EM-' + id[0:6].upper()
+
+    // ---------- الطلبات (orders = شراء، quotes = عروض أسعار) ----------
+    function common(id, d) {
+      return d.ref == 'EM-' + id[0:6].upper()
         && str(d.name, 2, 100)
         && d.phone is string && d.phone.matches('^05[0-9]{8}$')
         && (!('email' in d) || (str(d.email, 3, 120) && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')))
-        && str(d.serviceId, 1, 80)
-        && str(d.serviceName, 1, 160)
-        && str(d.description, 3, 500)
-        && validItems(d.items)
-        && d.status == 'new'
-        && d.source == 'web'
-        && d.consent == true
-        && d.createdAt == request.time;
+        && (!('customerType' in d) || d.customerType in ['individual', 'business', 'government'])
+        && optStr(d, 'company', 120) && optStr(d, 'vatNumber', 20) && optStr(d, 'city', 60) && optStr(d, 'role', 80)
+        && d.items is list && d.items.size() <= 30
+        && optList(d, 'files', 10)
+        && d.status == 'new' && d.source == 'web' && d.consent == true
+        && d.createdAt == request.time
+        // الطلب يُربط بحساب صاحبه فقط
+        && (!('uid' in d) || (realUser() && d.uid == request.auth.uid));
+    }
+    function validPurchase(id, d) {
+      return d.keys().hasAll(['ref', 'type', 'name', 'phone', 'items', 'totals', 'delivery', 'paymentMethod', 'status', 'source', 'consent', 'createdAt'])
+        && d.keys().hasOnly(['ref', 'type', 'customerType', 'company', 'vatNumber', 'name', 'phone', 'email', 'delivery', 'address', 'paymentMethod', 'notes', 'items', 'totals', 'status', 'source', 'consent', 'createdAt', 'uid'])
+        && d.type == 'purchase'
+        && d.items.size() >= 1
+        && d.delivery in ['pickup', 'delivery']
+        && d.paymentMethod in ['cod', 'store', 'bank']
+        && d.totals is map && d.totals.total is number && d.totals.total >= 0
+        && optStr(d, 'notes', 500)
+        && common(id, d);
+    }
+    function validQuote(id, d) {
+      return d.keys().hasAll(['ref', 'type', 'kind', 'name', 'phone', 'items', 'description', 'status', 'source', 'consent', 'createdAt'])
+        && d.keys().hasOnly(['ref', 'type', 'kind', 'customerType', 'company', 'role', 'vatNumber', 'city', 'name', 'phone', 'email', 'serviceId', 'serviceName', 'categories', 'title', 'items', 'quantity', 'specs', 'description', 'deadline', 'budget', 'files', 'status', 'source', 'consent', 'createdAt', 'uid'])
+        && d.type == 'quote' && d.kind in ['rfq', 'project', 'custom']
+        && str(d.description, 1, 2000)
+        && optStr(d, 'specs', 1500) && optStr(d, 'quantity', 160) && optStr(d, 'title', 120) && optStr(d, 'deadline', 20) && optStr(d, 'budget', 60)
+        && optList(d, 'categories', 10)
+        && common(id, d);
+    }
+    // تحديثات المشرف: الحالة والملاحظات وقيمة العرض فقط — لا تعديل لبيانات العميل أو البنود
+    function adminUpdate() {
+      return isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes', 'adminNotes', 'customerMessage', 'quotedAmount', 'history', 'updatedAt', 'updatedBy', 'verification'])
+        && request.resource.data.status in ['new', 'contacted', 'quoted', 'confirmed', 'paid', 'in_progress', 'ready', 'shipped', 'done', 'cancelled'];
     }
     match /orders/{id} {
-      allow create: if validNewOrder(id, request.resource.data);
-      allow read, delete: if isAdmin();
-      // المشرف يحدّث الحالة والملاحظات فقط، دون تعديل بيانات العميل
+      allow create: if validPurchase(id, request.resource.data);
+      allow read: if isAdmin() || (realUser() && resource.data.uid == request.auth.uid);
+      allow update: if adminUpdate();
+      allow delete: if isAdmin();
+    }
+    match /quotes/{id} {
+      allow create: if validQuote(id, request.resource.data);
+      allow read: if isAdmin() || (realUser() && resource.data.uid == request.auth.uid);
+      allow update: if adminUpdate();
+      allow delete: if isAdmin();
+    }
+
+    // ---------- تتبع الطلب للزوار ----------
+    // المعرّف = رقم الطلب + "_" + آخر 4 أرقام من الجوال (لا يمكن سرد المستندات، ولا بيانات شخصية فيه)
+    match /tracking/{tid} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create: if isAdmin() || request.resource.data.keys().hasOnly(['ref', 'coll', 'orderId', 'phoneTail', 'type', 'status', 'total', 'createdAt'])
+        && request.resource.data.coll in ['orders', 'quotes']
+        && tid == request.resource.data.ref + '_' + request.resource.data.phoneTail
+        && request.resource.data.status == 'new'
+        && request.resource.data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/$(request.resource.data.coll)/$(request.resource.data.orderId)).data.ref == request.resource.data.ref
+        && getAfter(/databases/$(database)/documents/$(request.resource.data.coll)/$(request.resource.data.orderId)).data.phone[6:10] == request.resource.data.phoneTail;
       allow update: if isAdmin()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'notes', 'updatedAt', 'updatedBy'])
-        && request.resource.data.status in ['new', 'contacted', 'quoted', 'in_progress', 'done', 'cancelled'];
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'history', 'quotedAmount', 'customerMessage', 'updatedAt']);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- رسائل التواصل والبلاغات ----------
+    match /messages/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['kind', 'name', 'phone', 'email', 'subject', 'message', 'orderRef', 'files', 'status', 'createdAt'])
+        && request.resource.data.kind in ['contact', 'issue']
+        && str(request.resource.data.name, 2, 100)
+        && request.resource.data.phone.matches('^05[0-9]{8}$')
+        && str(request.resource.data.subject, 1, 120)
+        && str(request.resource.data.message, 5, 2000)
+        && optStr(request.resource.data, 'email', 120) && optStr(request.resource.data, 'orderRef', 12)
+        && optList(request.resource.data, 'files', 10)
+        && request.resource.data.status == 'new'
+        && request.resource.data.createdAt == request.time;
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt', 'updatedBy']);
+    }
+
+    // ---------- العملاء ----------
+    match /customers/{uid} {
+      allow read: if isAdmin() || (realUser() && request.auth.uid == uid);
+      allow create, update: if realUser() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'phone', 'email', 'company', 'vatNumber', 'addresses', 'favorites', 'createdAt', 'updatedAt'])
+        && optStr(request.resource.data, 'name', 100) && optStr(request.resource.data, 'company', 120) && optStr(request.resource.data, 'vatNumber', 20)
+        && optList(request.resource.data, 'addresses', 10) && optList(request.resource.data, 'favorites', 200);
+      allow delete: if isAdmin();
     }
 
     // ---------- المشرفون ----------
-    // يُنشأ أول مشرف يدويًا من Firebase Console (انظر README).
-    match /admins/{uid} {
+    // يُضاف المشرف من Firebase Console فقط (لا يمكن لأي حساب منح نفسه الصلاحية).
+    match /admin_users/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
       allow write: if false;
     }

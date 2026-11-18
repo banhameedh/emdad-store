@@ -1,0 +1,8 @@
+Saudi Riyal Font (saudi-riyal-400.woff2, saudi-riyal-700.woff2)
+Copyright (c) emran-alhaddad — https://github.com/emran-alhaddad/Saudi-Riyal-Font
+npm: @emran-alhaddad/saudi-riyal-font@1.1.0
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+The full license text is available at: https://openfontlicense.org/open-font-license-official-text/
+
+Used here only to render the Saudi Riyal currency sign (U+20C1) via CSS unicode-range.

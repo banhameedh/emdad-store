@@ -13,7 +13,6 @@ export const oneLine = (v) => String(v ?? '').replace(/\s*\n\s*/g, ' ');
 export const imgSrc = (p) => esc(p || 'assets/images/facade-emdad-headquarters.jpg');
 export const pad2 = (n) => String(n).padStart(2, '0');
 export const fmtNum = (n) => Number(n || 0).toLocaleString('en-US');
-export const fmtPrice = (p) => (p === null || p === undefined || p === '' ? '' : `${fmtNum(p)} ر.س`);
 
 export const ic = (d, s = 18, c = '#075A9F', w = 1.8, f = 'none') =>
   `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="${f}" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
