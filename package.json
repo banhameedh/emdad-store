@@ -1,0 +1,23 @@
+{
+  "name": "emdad-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "المتجر الرقمي لمؤسسة الإمدادات الذكية الحديثة — واجهة المتجر ولوحة التحكم مع Firebase",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "tailwindcss -c tailwind.config.cjs -i src/styles.css -o dist/app.css --minify",
+    "build:js": "esbuild src/app/main.js src/admin/main.js --bundle --format=esm --minify --target=es2020 --outdir=dist --entry-names=[dir] --splitting --chunk-names=chunks/[name]-[hash]",
+    "dev": "npm run build && npx --yes http-server -c-1 -p 5173 .",
+    "emulators": "npx --yes firebase-tools@15 emulators:start --only firestore,auth,storage --project demo-emdad",
+    "test": "npx --yes firebase-tools@15 emulators:exec --only firestore,auth --project demo-emdad \"node --test --test-force-exit tests/*.test.mjs\"",
+    "deploy": "npm run build && npx --yes firebase-tools@15 deploy"
+  },
+  "dependencies": {
+    "firebase": "^13.4.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "tailwindcss": "3.4.19"
+  }
+}
